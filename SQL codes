@@ -1,0 +1,138 @@
+-- creating a database bookstore
+ CREATE DATABASE bookstore;
+ use bookstore;
+
+--        creating table customer
+ CREATE TABLE customer(
+ customer_id INT PRIMARY KEY AUTO_INCREMENT,
+ first_name VARCHAR(50),
+ last_name VARCHAR(50),
+ email VARCHAR(50),
+ phone VARCHAR(20)
+ ) AUTO_INCREMENT = 001;
+
+--                  creating table publisher
+ CREATE TABLE publisher(publisher_id INT PRIMARY KEY AUTO_INCREMENT,
+ publisher_name VARCHAR(50),
+ contact_email VARCHAR(20),
+ phone_no VARCHAR(20)
+ )AUTO_INCREMENT = 001;
+
+--              creating authors table     
+ CREATE TABLE author(
+ author_id INT PRIMARY KEY AUTO_INCREMENT,
+ first_name VARCHAR(20),
+ last_name VARCHAR(20),
+ email VARCHAR(20))
+ AUTO_INCREMENT = 001;
+
+--               creating book_language table
+ CREATE TABLE book_language(
+ language_id INT PRIMARY KEY AUTO_INCREMENT,
+ language_name VARCHAR(20))
+ AUTO_INCREMENT = 001;
+
+--               creating book_author table
+  CREATE TABLE book_author(book_id INT,
+  author_id INT,
+  FOREIGN KEY(book_id) REFERENCES book(book_id),
+  FOREIGN KEY(author_id) REFERENCES author(author_id),
+  PRIMARY KEY (book_id, author_id)
+  );
+
+
+--               creating book table
+ CREATE TABLE book( 
+  book_id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(100),
+  price int,
+  publisher_id int,
+  language_id  int,
+  publish_year DATE,
+  FOREIGN KEY(publisher_id) REFERENCES publisher(publisher_id),
+  FOREIGN KEY(language_id) REFERENCES book_language(language_id))
+  AUTO_INCREMENT = 100;
+
+--                creating country table
+ CREATE TABLE country(
+ country_code INT PRIMARY KEY,
+ country_name VARCHAR(20));
+
+--                creating address table
+ CREATE TABLE address(
+ address_id INT PRIMARY KEY AUTO_INCREMENT,
+ street VARCHAR(50),
+ city VARCHAR(20),
+ postal_code INT,
+ country_code INT,
+ FOREIGN KEY(country_code) REFERENCES country(country_code)
+ ) AUTO_INCREMENT = 0001;
+
+--                    creating table address_status
+ CREATE TABLE address_status(
+ address_status_id INT PRIMARY KEY AUTO_INCREMENT,
+ status_description VARCHAR(20) NOT NULL)
+ AUTO_INCREMENT = 0001;
+
+--                  creating table customer_address
+  CREATE TABLE customer_address(
+  customer_id INT,
+  address_id INT,
+  address_status_id INT,
+  FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+  FOREIGN KEY(address_id) REFERENCES address(address_id),
+  FOREIGN KEY(address_status_id) REFERENCES address_status(address_status_id),
+  PRIMARY KEY (customer_id, address_id));
+
+--              creating order_status table
+ CREATE TABLE order_status(
+ status_id INT PRIMARY KEY AUTO_INCREMENT,
+ status_name VARCHAR(20)
+ )AUTO_INCREMENT 0001;
+
+--                  creating shipping_method table
+ CREATE TABLE shipping_method(shipping_method_id INT PRIMARY KEY AUTO_INCREMENT,
+ method_name VARCHAR(20),
+ cost DECIMAL(5,2)
+ )AUTO_INCREMENT = 0001;
+
+--                  creating table customer_data
+ CREATE TABLE customer_order(
+ order_id INT PRIMARY KEY AUTO_INCREMENT,
+ customer_id INT,
+ shipping_method_id INT,
+ status_id INT,
+ order_date DATE,
+ FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+ FOREIGN KEY(shipping_method_id) REFERENCES shipping_method(shipping_method_id),
+ FOREIGN KEY(status_id) REFERENCES order_status(status_id)
+ )AUTO_INCREMENT = 0001;
+
+--                   creating table order_line
+ CREATE TABLE order_line(
+ order_line_id INT PRIMARY KEY AUTO_INCREMENT,
+ order_id INT,
+ book_id INT,
+ quantity INT,
+ FOREIGN KEY(order_id) REFERENCES customer_order(order_id),
+ FOREIGN KEY(book_id) REFERENCES book(book_id)
+ )AUTO_INCREMENT = 0001;
+
+--                   creating table order_history
+ CREATE TABLE order_history(
+ order_history_id INT PRIMARY KEY AUTO_INCREMENT,
+ order_id INT,
+ status_id INT,
+ FOREIGN KEY(order_id) REFERENCES customer_order(order_id),
+ FOREIGN KEY(status_id) REFERENCES order_status(status_id)
+ )AUTO_INCREMENT = 0001;
+
+--    -----------------   INSERTING VALUES TO THE TABLES ---------------
+INSERT INTO customer(first_name, last_name, email, phone)
+VALUES("Cavin", "woods", "cavinwoods@gmail.com", "+234567890342"),
+("James", "Mwangi", "danieljames@gmail.com", "+254123456789"),
+("Michael", "Scotfield", "scotfield877@gmail.com", "+1234567890"),
+("George", "Washington", "washington34@gmail.com", "+47456789021");
+
+
+SELECT * FROM customer;
